@@ -83,13 +83,15 @@ public class ViewNoteActivityTest {
         Intent intent = new Intent(RuntimeEnvironment.getApplication(), ViewNoteActivity.class);
         intent.putExtra("note_name", "Non Existent Note");
 
-        ViewNoteActivity newActivity = Robolectric.buildActivity(ViewNoteActivity.class, intent)
-                .create()
-                .resume()
-                .get();
+        ActivityController<ViewNoteActivity> controller = Robolectric.buildActivity(ViewNoteActivity.class, intent);
+        controller.create();
+        ViewNoteActivity newActivity = controller.get();
+        newActivity.setTheme(android.R.style.Theme_Material_Light);
 
         TextView textViewNoteName = newActivity.findViewById(R.id.textViewNoteName);
         TextView textViewNoteContent = newActivity.findViewById(R.id.textViewNoteContent);
+
+        controller.resume();
 
         assertEquals("Non Existent Note", textViewNoteName.getText().toString());
         assertEquals("", textViewNoteContent.getText().toString());
@@ -99,13 +101,15 @@ public class ViewNoteActivityTest {
     public void testMissingNoteNameExtra() {
         Intent intent = new Intent(RuntimeEnvironment.getApplication(), ViewNoteActivity.class);
 
-        ViewNoteActivity newActivity = Robolectric.buildActivity(ViewNoteActivity.class, intent)
-                .create()
-                .resume()
-                .get();
+        ActivityController<ViewNoteActivity> controller = Robolectric.buildActivity(ViewNoteActivity.class, intent);
+        controller.create();
+        ViewNoteActivity newActivity = controller.get();
+        newActivity.setTheme(android.R.style.Theme_Material_Light);
 
         TextView textViewNoteName = newActivity.findViewById(R.id.textViewNoteName);
         TextView textViewNoteContent = newActivity.findViewById(R.id.textViewNoteContent);
+
+        controller.resume();
 
         assertEquals("", textViewNoteName.getText().toString());
         assertEquals("", textViewNoteContent.getText().toString());
