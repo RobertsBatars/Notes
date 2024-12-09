@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.MenuItem;
 import android.widget.ListView;
+import com.example.notes.TestNotesApplication;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;

@@ -3,6 +3,7 @@ package com.example.notes;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.TextView;
+import com.example.notes.TestNotesApplication;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
