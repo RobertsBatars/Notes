@@ -18,7 +18,7 @@ import static android.content.Context.MODE_PRIVATE;
 @RunWith(RobolectricTestRunner.class)
 @org.robolectric.annotation.Config(
     sdk = {29},
-    application = android.app.Application.class,
+    application = TestNotesApplication.class,
     manifest = "AndroidManifest.xml"
 )
 public class ViewNoteActivityTest {
