@@ -2,7 +2,9 @@ package com.example.notes;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Root;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -11,15 +13,49 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 
-import static androidx.test.espresso.Espresso.*;
-import static androidx.test.espresso.action.ViewActions.*;
-import static androidx.test.espresso.assertion.ViewAssertions.*;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-import static org.hamcrest.Matchers.*;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import org.hamcrest.Matcher;
 
 @RunWith(AndroidJUnit4.class)
 public class NotesUITest {
+    
+    public static Matcher<View> hasDescendant(final Matcher<View> matcher) {
+        return new BoundedMatcher<View, View>(View.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has descendant: ");
+                matcher.describeTo(description);
+            }
+
+            @Override
+            protected boolean matchesSafely(View view) {
+                if (view instanceof android.view.ViewGroup) {
+                    android.view.ViewGroup group = (android.view.ViewGroup) view;
+                    for (int i = 0; i < group.getChildCount(); i++) {
+                        if (matcher.matches(group.getChildAt(i))) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        };
+    }
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = 
         new ActivityScenarioRule<>(MainActivity.class);
@@ -33,6 +69,8 @@ public class NotesUITest {
         editor.apply();
     }
 
+    private View decorView;
+
     @Test
     public void testAddNote() {
         // Click add note button
@@ -41,9 +79,11 @@ public class NotesUITest {
 
         // Enter note details
         onView(withId(R.id.editTextNoteName))
-            .perform(typeText("Test Note"), closeSoftKeyboard());
+            .perform(typeText("Test Note"))
+            .perform(closeSoftKeyboard());
         onView(withId(R.id.editTextNoteContent))
-            .perform(typeText("Test Content"), closeSoftKeyboard());
+            .perform(typeText("Test Content"))
+            .perform(closeSoftKeyboard());
 
         // Save note
         onView(withId(R.id.buttonSave))
@@ -60,9 +100,11 @@ public class NotesUITest {
         onView(withId(R.id.action_add_note))
             .perform(click());
         onView(withId(R.id.editTextNoteName))
-            .perform(typeText("View Test Note"), closeSoftKeyboard());
+            .perform(typeText("View Test Note"))
+            .perform(closeSoftKeyboard());
         onView(withId(R.id.editTextNoteContent))
-            .perform(typeText("View Test Content"), closeSoftKeyboard());
+            .perform(typeText("View Test Content"))
+            .perform(closeSoftKeyboard());
         onView(withId(R.id.buttonSave))
             .perform(click());
 
@@ -83,9 +125,11 @@ public class NotesUITest {
         onView(withId(R.id.action_add_note))
             .perform(click());
         onView(withId(R.id.editTextNoteName))
-            .perform(typeText("Delete Test Note"), closeSoftKeyboard());
+            .perform(typeText("Delete Test Note"))
+            .perform(closeSoftKeyboard());
         onView(withId(R.id.editTextNoteContent))
-            .perform(typeText("Delete Test Content"), closeSoftKeyboard());
+            .perform(typeText("Delete Test Content"))
+            .perform(closeSoftKeyboard());
         onView(withId(R.id.buttonSave))
             .perform(click());
 
@@ -107,6 +151,10 @@ public class NotesUITest {
 
     @Test
     public void testEmptyNoteValidation() {
+        activityRule.getScenario().onActivity(activity -> {
+            decorView = activity.getWindow().getDecorView();
+        });
+
         // Click add note button
         onView(withId(R.id.action_add_note))
             .perform(click());
@@ -117,7 +165,7 @@ public class NotesUITest {
 
         // Verify error toast is shown
         onView(withText(R.string.empty_fields_warning))
-            .inRoot(withDecorView(not(is(activityRule.getScenario().getResult().getActivity().getWindow().getDecorView()))))
+            .inRoot(withDecorView(not(is(decorView))))
             .check(matches(isDisplayed()));
     }
 
@@ -148,9 +196,11 @@ public class NotesUITest {
 
         // Enter note details
         onView(withId(R.id.editTextNoteName))
-            .perform(typeText("Long Note"), closeSoftKeyboard());
+            .perform(typeText("Long Note"))
+            .perform(closeSoftKeyboard());
         onView(withId(R.id.editTextNoteContent))
-            .perform(typeText(longContent), closeSoftKeyboard());
+            .perform(typeText(longContent))
+            .perform(closeSoftKeyboard());
 
         // Save note
         onView(withId(R.id.buttonSave))

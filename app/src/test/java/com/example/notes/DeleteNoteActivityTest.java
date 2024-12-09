@@ -97,8 +97,8 @@ public class DeleteNoteActivityTest {
 
     @Test
     public void testActionBarBackButton() {
-        assertTrue((activity.getSupportActionBar().getDisplayOptions() 
-            & android.app.ActionBar.DISPLAY_HOME_AS_UP) != 0);
+        int displayOptions = activity.getSupportActionBar().getDisplayOptions();
+        assertTrue((displayOptions & android.app.ActionBar.DISPLAY_HOME_AS_UP) != 0);
     }
 
     @Test
