@@ -23,6 +23,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class ViewNoteActivityTest {
     private ViewNoteActivity activity;
     private SharedPreferences prefs;
+    private ActivityController<ViewNoteActivity> controller;
+    private TextView textViewNoteName;
+    private TextView textViewNoteContent;
     private static final String TEST_NOTE_NAME = "Test Note";
     private static final String TEST_NOTE_CONTENT = "Test Content";
 
@@ -40,23 +43,20 @@ public class ViewNoteActivityTest {
         intent.putExtra("note_name", TEST_NOTE_NAME);
 
         // Create activity with intent
-        ActivityController<ViewNoteActivity> controller = Robolectric.buildActivity(ViewNoteActivity.class, intent);
+        controller = Robolectric.buildActivity(ViewNoteActivity.class, intent);
         controller.create();
         activity = controller.get();
         activity.setTheme(android.R.style.Theme_Material_Light);
 
         // Initialize views before resuming
-        TextView textViewNoteName = activity.findViewById(R.id.textViewNoteName);
-        TextView textViewNoteContent = activity.findViewById(R.id.textViewNoteContent);
+        textViewNoteName = activity.findViewById(R.id.textViewNoteName);
+        textViewNoteContent = activity.findViewById(R.id.textViewNoteContent);
 
         controller.resume();
     }
 
     @Test
     public void testNoteDisplayed() {
-        TextView textViewNoteName = activity.findViewById(R.id.textViewNoteName);
-        TextView textViewNoteContent = activity.findViewById(R.id.textViewNoteContent);
-
         assertEquals(TEST_NOTE_NAME, textViewNoteName.getText().toString());
         assertEquals(TEST_NOTE_CONTENT, textViewNoteContent.getText().toString());
     }
