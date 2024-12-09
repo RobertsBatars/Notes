@@ -17,6 +17,12 @@ android {
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

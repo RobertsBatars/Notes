@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import static android.content.Context.MODE_PRIVATE;
 
 @RunWith(RobolectricTestRunner.class)
+@org.robolectric.annotation.Config(sdk = {29})
 public class ViewNoteActivityTest {
     private ViewNoteActivity activity;
     private SharedPreferences prefs;
