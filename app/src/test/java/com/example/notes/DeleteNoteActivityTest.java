@@ -18,7 +18,11 @@ import static org.junit.Assert.*;
 import static android.content.Context.MODE_PRIVATE;
 
 @RunWith(RobolectricTestRunner.class)
-@org.robolectric.annotation.Config(sdk = {29})
+@org.robolectric.annotation.Config(
+    sdk = {29},
+    application = android.app.Application.class,
+    manifest = "src/main/AndroidManifest.xml"
+)
 public class DeleteNoteActivityTest {
     private DeleteNoteActivity activity;
     private SharedPreferences prefs;
