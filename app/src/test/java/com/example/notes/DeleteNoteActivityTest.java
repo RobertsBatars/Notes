@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.example.notes.TestNotesApplication;
+// TestNotesApplication is in the same package
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
