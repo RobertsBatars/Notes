@@ -22,6 +22,9 @@ android {
             includeAndroidResources = true
             all {
                 systemProperty 'robolectric.manifest', project.android.sourceSets.main.manifest.srcFile.absolutePath
+                systemProperty 'robolectric.packageName', 'com.example.notes'
+                systemProperty 'robolectric.resourceDir', project.android.sourceSets.main.res.srcDirs[0].absolutePath
+                systemProperty 'robolectric.assetDir', project.android.sourceSets.main.assets.srcDirs[0].absolutePath
             }
         }
     }
