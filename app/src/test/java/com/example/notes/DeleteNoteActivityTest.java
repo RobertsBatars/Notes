@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -28,6 +29,7 @@ public class DeleteNoteActivityTest {
     private DeleteNoteActivity activity;
     private SharedPreferences prefs;
     private ListView listViewNotesToDelete;
+    private ActivityController<DeleteNoteActivity> controller;
 
     @Before
     public void setUp() {
@@ -40,7 +42,7 @@ public class DeleteNoteActivityTest {
         editor.putString("Test Note 2", "Content 2");
         editor.apply();
 
-        ActivityController<DeleteNoteActivity> controller = Robolectric.buildActivity(DeleteNoteActivity.class);
+        controller = Robolectric.buildActivity(DeleteNoteActivity.class);
         controller.create();
         activity = controller.get();
         activity.setTheme(android.R.style.Theme_Material_Light);
@@ -48,6 +50,12 @@ public class DeleteNoteActivityTest {
         listViewNotesToDelete = activity.findViewById(R.id.listViewNotesToDelete);
 
         controller.resume();
+    }
+
+    @After
+    public void tearDown() {
+        controller.pause().stop().destroy();
+        prefs.edit().clear().apply();
     }
 
     @Test

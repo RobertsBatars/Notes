@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.TextView;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -35,6 +36,7 @@ public class ViewNoteActivityTest {
         prefs = RuntimeEnvironment.getApplication()
                 .getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
         editor.putString(TEST_NOTE_NAME, TEST_NOTE_CONTENT);
         editor.apply();
 
@@ -53,6 +55,12 @@ public class ViewNoteActivityTest {
         textViewNoteContent = activity.findViewById(R.id.textViewNoteContent);
 
         controller.resume();
+    }
+
+    @After
+    public void tearDown() {
+        controller.pause().stop().destroy();
+        prefs.edit().clear().apply();
     }
 
     @Test

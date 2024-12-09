@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.widget.Button;
 import android.widget.EditText;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -27,21 +28,30 @@ public class AddNoteActivityTest {
     private EditText editTextNoteName;
     private EditText editTextNoteContent;
     private Button buttonSave;
+    private ActivityController<AddNoteActivity> controller;
 
     @Before
     public void setUp() {
-        ActivityController<AddNoteActivity> controller = Robolectric.buildActivity(AddNoteActivity.class);
+        controller = Robolectric.buildActivity(AddNoteActivity.class);
         controller.create();
         activity = controller.get();
         activity.setTheme(android.R.style.Theme_Material_Light);
+
         prefs = RuntimeEnvironment.getApplication()
                 .getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().clear().apply();
         
         editTextNoteName = activity.findViewById(R.id.editTextNoteName);
         editTextNoteContent = activity.findViewById(R.id.editTextNoteContent);
         buttonSave = activity.findViewById(R.id.buttonSave);
 
         controller.resume();
+    }
+
+    @After
+    public void tearDown() {
+        controller.pause().stop().destroy();
+        prefs.edit().clear().apply();
     }
 
     @Test

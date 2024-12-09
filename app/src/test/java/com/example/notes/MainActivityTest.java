@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.view.MenuItem;
 import android.widget.ListView;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -38,10 +39,17 @@ public class MainActivityTest {
 
         prefs = RuntimeEnvironment.getApplication()
                 .getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().clear().apply();
         
         listView = activity.findViewById(R.id.listViewNotes);
 
         controller.resume();
+    }
+
+    @After
+    public void tearDown() {
+        controller.pause().stop().destroy();
+        prefs.edit().clear().apply();
     }
 
     @Test
