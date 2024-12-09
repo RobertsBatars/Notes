@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
@@ -39,10 +40,11 @@ public class ViewNoteActivityTest {
         intent.putExtra("note_name", TEST_NOTE_NAME);
 
         // Create activity with intent
-        activity = Robolectric.buildActivity(ViewNoteActivity.class, intent)
-                .create()
-                .resume()
-                .get();
+        ActivityController<ViewNoteActivity> controller = Robolectric.buildActivity(ViewNoteActivity.class, intent);
+        controller.create();
+        activity = controller.get();
+        activity.setTheme(android.R.style.Theme_Material_Light);
+        controller.resume();
     }
 
     @Test

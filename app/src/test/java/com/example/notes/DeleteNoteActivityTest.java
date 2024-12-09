@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowToast;
@@ -39,10 +40,11 @@ public class DeleteNoteActivityTest {
         editor.putString("Test Note 2", "Content 2");
         editor.apply();
 
-        activity = Robolectric.buildActivity(DeleteNoteActivity.class)
-                .create()
-                .resume()
-                .get();
+        ActivityController<DeleteNoteActivity> controller = Robolectric.buildActivity(DeleteNoteActivity.class);
+        controller.create();
+        activity = controller.get();
+        activity.setTheme(android.R.style.Theme_Material_Light);
+        controller.resume();
 
         listViewNotesToDelete = activity.findViewById(R.id.listViewNotesToDelete);
     }

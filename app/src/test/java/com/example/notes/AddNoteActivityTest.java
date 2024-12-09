@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowToast;
@@ -29,10 +30,11 @@ public class AddNoteActivityTest {
 
     @Before
     public void setUp() {
-        activity = Robolectric.buildActivity(AddNoteActivity.class)
-                .create()
-                .resume()
-                .get();
+        ActivityController<AddNoteActivity> controller = Robolectric.buildActivity(AddNoteActivity.class);
+        controller.create();
+        activity = controller.get();
+        activity.setTheme(android.R.style.Theme_Material_Light);
+        controller.resume();
         
         prefs = RuntimeEnvironment.getApplication()
                 .getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
