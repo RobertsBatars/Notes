@@ -19,7 +19,7 @@ import static android.content.Context.MODE_PRIVATE;
 @org.robolectric.annotation.Config(
     sdk = {29},
     application = android.app.Application.class,
-    manifest = "src/main/AndroidManifest.xml"
+    manifest = "AndroidManifest.xml"
 )
 public class ViewNoteActivityTest {
     private ViewNoteActivity activity;
