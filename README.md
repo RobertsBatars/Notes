@@ -56,7 +56,62 @@ app/src/
 
 ### Unit Tests
 
-The unit tests use Robolectric framework and can be run without an Android device:
+The unit tests use Robolectric framework and can be run without an Android device. The tests are configured using both robolectric.properties and build.gradle:
+
+#### Robolectric Configuration
+
+```properties
+# app/src/test/resources/robolectric.properties
+sdk=29
+application=com.example.notes.TestNotesApplication
+manifest=AndroidManifest.xml
+resourceDir=../../src/main/res
+assetDir=../../src/main/assets
+packageName=com.example.notes
+```
+
+```gradle
+// app/build.gradle
+testOptions {
+    unitTests {
+        includeAndroidResources = true
+        all {
+            systemProperty 'robolectric.manifest', project.android.sourceSets.main.manifest.srcFile.absolutePath
+            systemProperty 'robolectric.packageName', 'com.example.notes'
+            systemProperty 'robolectric.resourceDir', project.android.sourceSets.main.res.srcDirs[0].absolutePath
+            systemProperty 'robolectric.assetDir', project.android.sourceSets.main.assets.srcDirs[0].absolutePath
+        }
+    }
+}
+```
+
+#### Test Application
+
+The tests use a custom Application class for proper theme handling:
+
+```java
+// app/src/test/java/com/example/notes/TestNotesApplication.java
+public class TestNotesApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        setTheme(android.R.style.Theme_Material_Light);
+    }
+
+    @Override
+    public void setTheme(int resid) {
+        super.setTheme(android.R.style.Theme_Material_Light);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+}
+```
+
+#### Running the Tests
 
 ```bash
 # Run all unit tests
