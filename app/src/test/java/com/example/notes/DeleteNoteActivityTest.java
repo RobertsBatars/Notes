@@ -44,9 +44,10 @@ public class DeleteNoteActivityTest {
         controller.create();
         activity = controller.get();
         activity.setTheme(android.R.style.Theme_Material_Light);
-        controller.resume();
 
         listViewNotesToDelete = activity.findViewById(R.id.listViewNotesToDelete);
+
+        controller.resume();
     }
 
     @Test

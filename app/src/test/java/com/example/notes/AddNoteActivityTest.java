@@ -34,14 +34,14 @@ public class AddNoteActivityTest {
         controller.create();
         activity = controller.get();
         activity.setTheme(android.R.style.Theme_Material_Light);
-        controller.resume();
-        
         prefs = RuntimeEnvironment.getApplication()
                 .getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         
         editTextNoteName = activity.findViewById(R.id.editTextNoteName);
         editTextNoteContent = activity.findViewById(R.id.editTextNoteContent);
         buttonSave = activity.findViewById(R.id.buttonSave);
+
+        controller.resume();
     }
 
     @Test

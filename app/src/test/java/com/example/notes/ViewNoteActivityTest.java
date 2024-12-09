@@ -44,6 +44,11 @@ public class ViewNoteActivityTest {
         controller.create();
         activity = controller.get();
         activity.setTheme(android.R.style.Theme_Material_Light);
+
+        // Initialize views before resuming
+        TextView textViewNoteName = activity.findViewById(R.id.textViewNoteName);
+        TextView textViewNoteContent = activity.findViewById(R.id.textViewNoteContent);
+
         controller.resume();
     }
 

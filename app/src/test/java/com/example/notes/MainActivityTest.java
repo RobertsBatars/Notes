@@ -26,21 +26,26 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainActivityTest {
     private MainActivity activity;
     private SharedPreferences prefs;
+    private ActivityController<MainActivity> controller;
+    private ListView listView;
 
     @Before
     public void setUp() {
-        ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class);
+        controller = Robolectric.buildActivity(MainActivity.class);
         controller.create();
         activity = controller.get();
         activity.setTheme(android.R.style.Theme_Material_Light);
-        controller.resume();
+
         prefs = RuntimeEnvironment.getApplication()
                 .getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        
+        listView = activity.findViewById(R.id.listViewNotes);
+
+        controller.resume();
     }
 
     @Test
     public void testInitialListViewIsEmpty() {
-        ListView listView = activity.findViewById(R.id.listViewNotes);
         assertEquals(0, listView.getAdapter().getCount());
     }
 
@@ -52,12 +57,17 @@ public class MainActivityTest {
         editor.apply();
 
         // Recreate activity to reload notes
-        activity = Robolectric.buildActivity(MainActivity.class)
-                .create()
-                .resume()
-                .get();
+        controller.pause();
+        controller.stop();
+        controller.destroy();
+        
+        controller = Robolectric.buildActivity(MainActivity.class);
+        controller.create();
+        activity = controller.get();
+        activity.setTheme(android.R.style.Theme_Material_Light);
+        listView = activity.findViewById(R.id.listViewNotes);
+        controller.resume();
 
-        ListView listView = activity.findViewById(R.id.listViewNotes);
         assertEquals(1, listView.getAdapter().getCount());
         assertEquals("Test Note", listView.getAdapter().getItem(0));
     }
